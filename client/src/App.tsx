@@ -5,6 +5,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
+
+
 const App: React.FC = () => {
   console.log("App loaded ✅");
   return (
