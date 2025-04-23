@@ -6,7 +6,6 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import { useAuth } from "./context/AuthContext";
 
-
 const App: React.FC = () => {
   console.log("App loaded ✅");
   return (
@@ -14,7 +13,14 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<Login />} /> 
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+        <Route
+  path="/dashboard"
+  element={
+    <PrivateRoute>
+      <Dashboard />
+    </PrivateRoute>
+  }
+/>
         <Route path="*" element={<div>404</div>} />
       </Routes>
     </BrowserRouter>
@@ -25,11 +31,17 @@ const App: React.FC = () => {
 // This component checks if the user is authenticated
 // If authenticated, it renders the requested component
 // If not, it redirects to the login page
-const PrivateRoute = ({ element }: { element: ReactNode }) => {
+// Define props for PrivateRoute
+interface PrivateRouteProps {
+  children: React.ReactNode;
+}
+
+// Route guard wrapper
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) return <div>Loading...</div>;
-  return user ? element : <div>Access denied. Please <a href="/login">login</a>.</div>;
+  return user ? <>{children}</> : <div>Access denied. Please <a href="/login">login</a>.</div>;
 };
 
 
