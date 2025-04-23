@@ -15,12 +15,15 @@ app.use(cors());
 // enable json parsing for incoming
 app.use(express.json());
 
+const playlistRoutes = require("./routes/playlistRoutes");
+// use playlist routes
+console.log("✅ Playlist route registered at /api/playlists");
+app.use("/api/playlists", playlistRoutes);
+
 // test route to check if server is running
 app.get("/", (req, res) => {
     res.send("Server is running");
     });
-
-    
 
 // connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -37,6 +40,4 @@ mongoose.connect(process.env.MONGO_URI, {
     })
     .catch(err => console.error("MongoDB connection error:", err));
 
-const playlistRoutes = require("./routes/playlistRoutes");
-// use playlist routes
-app.use("/api/playlists", playlistRoutes);
+
