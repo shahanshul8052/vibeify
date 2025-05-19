@@ -1,38 +1,40 @@
 // src/pages/Dashboard.tsx
-import React from "react";
+
+import React, { useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import MusicPlayer from "../components/MusicPlayer";
 
-
-
-// Dashboard component (functional component using TypeScript)
+// Dashboard component
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
 
-  // Effect to check if user is logged in
+  // Check for auth token on load
   useEffect(() => {
     auth.currentUser?.getIdToken(true).then((token) => {
       console.log("🔥 Firebase Token:", token);
     });
   }, []);
 
-  // Function to handle logout
+  // Logout handler
   const handleLogout = async () => {
-    await signOut(auth); // Firebase logout
-    navigate("/login");  // Redirect to login
+    await signOut(auth);
+    navigate("/login");
   };
 
-  
-
   return (
-    // Main dashboard UI
-    <div style={{ padding: "2rem" }}>
-      <h2>🎧 Welcome to Vibeify Dashboard</h2>
-      <p>This is a protected route — only accessible if logged in.</p>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+    <>
+      {/* Main dashboard content */}
+      <div style={{ padding: "2rem" }}>
+        <h2>🎧 Welcome to Vibeify Dashboard</h2>
+        <p>This is a protected route — only accessible if logged in.</p>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+
+      {/* Persistent music player at the bottom */}
+      <MusicPlayer />
+    </>
   );
 };
 
