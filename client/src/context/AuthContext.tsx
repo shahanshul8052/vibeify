@@ -14,10 +14,7 @@ interface AuthContextType {
 
 // Create the context
 // This will be used to provide the authentication state
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  loading: true,
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Provider component to wrap around the app
 // This component will manage the authentication state
@@ -52,4 +49,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 // Custom hook for easy access
 // This hook allows components to access the authentication context
 // without needing to use the useContext hook directly
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
